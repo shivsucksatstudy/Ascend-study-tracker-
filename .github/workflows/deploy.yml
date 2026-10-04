@@ -27,17 +27,14 @@ jobs:
           grep -q "const V='$V'" sw.js
           echo "Version: $V"
 
-      - name: Check required files
-        run: |
-          for f in index.html sw.js manifest.webmanifest assets/en.js icons/icon-192.png icons/icon-512.png; do
-            test -s "$f" || { echo "Missing $f"; exit 1; }
-          done
-
       - name: Assemble site
         run: |
-          mkdir _site
-          cp -r index.html sw.js manifest.webmanifest assets icons _site/
+          mkdir -p _site/assets _site/icons
+          cp index.html sw.js manifest.webmanifest _site/
+          cp en.js _site/assets/
+          cp icon-192.png icon-512.png maskable-512.png apple-touch-icon.png favicon-32.png _site/icons/
           touch _site/.nojekyll
+          ls -R _site
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
